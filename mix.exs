@@ -34,7 +34,7 @@ defmodule Talar.MixProject do
   defp deps do
     [
       {:credo, "~> 1.0.0", only: [:dev, :test], runtime: false},
-      {:dialyxir, "~> 1.0.0-rc.5", only: [:dev], runtime: false},
+      {:dialyxir, "~> 1.0.0-rc.5", only: [:dev, :test], runtime: false},
       {:ecto_sql, "~> 3.0"},
       {:ex_guard, "~> 1.3", only: :dev},
       {:gettext, "~> 0.11"},
