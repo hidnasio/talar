@@ -4,7 +4,7 @@ use Mix.Config
 # you can enable the server option below.
 config :talar, TalarWeb.Endpoint,
   http: [port: 4002],
-  server: false
+  server: true
 
 # Print only warnings and errors during test
 config :logger, level: :warn
@@ -16,3 +16,7 @@ config :talar, Talar.Repo,
   database: "talar_test",
   hostname: "localhost",
   pool: Ecto.Adapters.SQL.Sandbox
+
+# Use Chrome in headless mode with ChromeDriver (default port 9515 assumed)
+config :hound, driver: "chrome_driver", browser: "chrome_headless"
+config :hound, app_host: "http://localhost", app_port: 4002

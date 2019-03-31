@@ -6,6 +6,7 @@ defaults: &defaults
     - image: circleci/elixir:1.8.0-node-browsers
       environment:
         MIX_ENV: test
+        PUPPETEER_EXECUTABLE_PATH: /usr/bin/google-chrome-stable
     - image: circleci/postgres:10.1-alpine
       environment:
         PGUSER: postgres
@@ -47,7 +48,7 @@ jobs:
           command: dockerize -wait tcp://localhost:5432 -timeout 1m
       - run:
           name: Run tests
-          command: mix test
+          command: mix test -- test/talar_web
   credo:
     <<: *defaults
     steps:
@@ -82,6 +83,25 @@ jobs:
       - run:
           name: Run dialyzer
           command: mix dialyzer
+  percy:
+    <<: *defaults
+    steps:
+      - attach_workspace:
+          at: ~/
+      - run:
+          name: Check chrome version
+          command: google-chrome-stable --version
+      - run:
+          name: Install Chromedriver
+          command: curl https://chromedriver.storage.googleapis.com/2.45/chromedriver_linux64.zip --output /tmp/chromedriver.zip && sudo unzip -o /tmp/chromedriver.zip chromedriver -d /usr/local/bin/
+      - run:
+          name: Start Chromedriver
+          command: chromedriver
+          background: true
+      - run: cd assets && PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true npm install @percy/agent
+      - run: cd assets && npm install && node node_modules/webpack/bin/webpack.js --mode development
+      - run: assets/node_modules/@percy/agent/bin/run exec -- mix test test/visual
+
 workflows:
   version: 2
   continuous_integration:
@@ -97,5 +117,8 @@ workflows:
           requires:
             - build
       - check_formatted:
+          requires:
+            - build
+      - percy:
           requires:
             - build

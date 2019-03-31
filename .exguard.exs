@@ -11,7 +11,7 @@ run = fn cmd ->
 end
 
 guard("test", run_on_start: true)
-|> command("mix test --color")
+|> command("mix test --color test/talar_web")
 |> run.()
 
 guard("dialyzer", run_on_start: true)

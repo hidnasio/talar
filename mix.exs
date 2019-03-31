@@ -38,6 +38,7 @@ defmodule Talar.MixProject do
       {:ecto_sql, "~> 3.0"},
       {:ex_guard, "~> 1.3", only: :dev},
       {:gettext, "~> 0.11"},
+      {:hound, "~> 1.0", only: :test},
       {:jason, "~> 1.0"},
       {:phoenix, "~> 1.4.0"},
       {:phoenix_ecto, "~> 4.0"},
